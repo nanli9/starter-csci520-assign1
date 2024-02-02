@@ -299,6 +299,7 @@ void showInclinePlane(struct world* jello) {
     double d = jello->d;
     double z1, z2, z3, z4;
     //check if c is 0
+
     if (c != 0)
     {
          z1 = (-d - a * (2) - b * (2)) / c;
