@@ -413,7 +413,6 @@ void showInclinePlane(struct world* jello) {
     }
     else
     {
-        //glBegin(GL_TRIANGLE_STRIP);
         glBegin(GL_QUADS);
         glVertex3f(2, (-d-(a*2))/b, 2);
         glVertex3f(2, ( - d - (a * -2)) / b, 2);

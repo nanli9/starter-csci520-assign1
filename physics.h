@@ -24,5 +24,6 @@ point findExternalForce(struct world* jello, int i, int j, int k);
 point getGrid(struct world* jello, int i,int j,int k);
 point trilinearInterpolation(point grid, struct world* jello);
 point collisionHandler(struct world* jello,double a,double b,double c,double d,int i,int j,int k);
+point userInputForce(struct world* jello);
 #endif
 

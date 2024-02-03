@@ -58,11 +58,25 @@ void mouseMotionDrag(int x, int y)
     g_vMousePos[0] = x;
     g_vMousePos[1] = y;
   }
-  if (g_iLeftMouseButton)//handle the drag force
+  if (g_iLeftMouseButton)//handle the drag force to all
   {
-      g_vMousePos[0] = x;
-      g_vMousePos[1] = y;
-      printf("g_vMousePos[0]:%d\n",g_vMousePos[0]);
+      if(toggleSinglePoint==0)
+      {
+          printf("move in x: %d\n", vMouseDelta[0]);
+          printf("move in y: %d\n", vMouseDelta[1]);
+          double k = 0.1;
+          point userInputForce = { vMouseDelta[0] ,vMouseDelta[1],0 };
+          userInputForce = -k * userInputForce;
+          jello.userInputForce = userInputForce;
+          printf("force (%f,%f,%f) added\n", userInputForce.x, userInputForce.y, userInputForce.z);
+
+          g_vMousePos[0] = x;
+          g_vMousePos[1] = y;
+      }
+      else//pick a single point
+      {
+
+      }
   }
 }
 
@@ -78,6 +92,11 @@ void mouseButton(int button, int state, int x, int y)
   {
     case GLUT_LEFT_BUTTON:
       g_iLeftMouseButton = (state==GLUT_DOWN);
+      //if left mouse is released
+      if (state == GLUT_UP)
+      {
+          jello.userInputForce = {0,0,0};
+      }
       break;
     case GLUT_MIDDLE_BUTTON:
       g_iMiddleMouseButton = (state==GLUT_DOWN);
@@ -138,6 +157,9 @@ void keyboardFunc (unsigned char key, int x, int y)
 
     case 't':
         addTexture = 1- addTexture;
+        break;
+    case 'q':
+        toggleSinglePoint = 1 - toggleSinglePoint;
         break;
     case ' ':
       saveScreenToFile = 1 - saveScreenToFile;

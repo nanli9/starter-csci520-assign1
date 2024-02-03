@@ -99,6 +99,11 @@ point findNetForce(struct world* jello,int i,int j,int k) {
     netForce.x = structuralForce.x + bendForce.x + shearForce.x + externalForce.x + collisionForce.x;
     netForce.y = structuralForce.y + bendForce.y+ shearForce.y+ externalForce.y + collisionForce.y;
     netForce.z = structuralForce.z + bendForce.z+ shearForce.z+ externalForce.z + collisionForce.z;
+    if (jello->userInputForce.x!=0 || jello->userInputForce.y != 0) {
+        
+        netForce.x = netForce.x + jello->userInputForce.x;
+        netForce.y = netForce.y + jello->userInputForce.y;
+    }
     return netForce;
 }
 double distanceBetweenPoints(struct world* jello,int x1, int y1, int z1,int x2,int y2,int z2) {
@@ -215,6 +220,10 @@ point collisionHandler(struct world* jello, double a, double b, double c, double
     point dampingForce = -jello->dCollision*jello->v[i][j][k]*n;
     collisionForce = elasticityForce + dampingForce;
     return collisionForce;
+}
+point userInputForce(struct world* jello) {
+    point userInputForce = { 0.0,0.0,0.0 };
+    return userInputForce;
 }
 /* performs one step of Euler Integration */
 /* as a result, updates the jello structure */

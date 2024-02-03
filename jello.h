@@ -69,7 +69,7 @@ struct neighbors {
     std::vector<neighbor> bendNeighborList;
 };
 // these variables control what is displayed on the screen
-extern int shear, bend, structural, pause, viewingMode, saveScreenToFile, addTexture;
+extern int shear, bend, structural, pause, viewingMode, saveScreenToFile, addTexture,toggleSinglePoint;
 enum SpringType {
     structuralType = 1,
     shearType = 2,
@@ -95,6 +95,7 @@ struct world
   struct neighbors neighborsInfo[8][8][8];
   void findNeighbors();
   void processNeighbors(int i,int j,int k,int di,int dj,int dk,SpringType type);
+  point userInputForce = {0.0,0.0,0.0};
 };
 
 extern struct world jello;
