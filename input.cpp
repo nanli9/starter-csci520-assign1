@@ -136,6 +136,9 @@ void keyboardFunc (unsigned char key, int x, int y)
       R += 0.2;
       break;
 
+    case 't':
+        addTexture = 1- addTexture;
+        break;
     case ' ':
       saveScreenToFile = 1 - saveScreenToFile;
       break;

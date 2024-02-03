@@ -136,6 +136,7 @@
     <ClInclude Include="physics.h" />
     <ClInclude Include="pic.h" />
     <ClInclude Include="showCube.h" />
+    <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp" />
@@ -144,6 +145,11 @@
     <ClCompile Include="pic.cpp" />
     <ClCompile Include="ppm.cpp" />
     <ClCompile Include="showCube.cpp" />
+    <ClCompile Include="stb_image.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="glass.png" />
+    <Image Include="slime.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,4 +13,5 @@ void showCube(struct world * jello);
 
 void showBoundingBox();
 void showInclinePlane(struct world* jello);
+void loadTexture();
 #endif

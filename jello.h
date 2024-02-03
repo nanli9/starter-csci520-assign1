@@ -23,7 +23,6 @@
 extern double Theta;
 extern double Phi;
 extern double R;
-
 // number of images saved to disk so far
 extern int sprite;
 
@@ -70,7 +69,7 @@ struct neighbors {
     std::vector<neighbor> bendNeighborList;
 };
 // these variables control what is displayed on the screen
-extern int shear, bend, structural, pause, viewingMode, saveScreenToFile;
+extern int shear, bend, structural, pause, viewingMode, saveScreenToFile, addTexture;
 enum SpringType {
     structuralType = 1,
     shearType = 2,

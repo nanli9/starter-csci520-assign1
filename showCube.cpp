@@ -8,6 +8,7 @@
 #include "jello.h"
 #include "showCube.h"
 #include "physics.h"
+#include "stb_image.h"
 
 int pointMap(int side, int i, int j)
 {
@@ -89,7 +90,7 @@ void showCube(struct world * jello)
             continue;
 
           glBegin(GL_POINTS); // draw point
-            glColor4f(0,0,0,0);  
+            glColor4f(0,0,0,0.5);  
             glVertex3f(jello->p[i][j][k].x,jello->p[i][j][k].y,jello->p[i][j][k].z);        
           glEnd();
 
@@ -225,106 +226,203 @@ void showCube(struct world * jello)
           }
           glEnd();
         }
-        
-        
     }  
   } // end for loop over faces
   glFrontFace(GL_CCW);
 }
+void loadTexture() {
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    // set the texture wrapping parameters
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
 
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+    unsigned char* data = stbi_load("glass.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    }
+    else
+    {
+        printf("Failed to load texture");
+    }
+    stbi_image_free(data);
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    //test
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glDisable(GL_CULL_FACE);
+    glColor4f(0.6, 0.6, 0.6, 0.2);
+    glBegin(GL_QUADS);
+    //front
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(2, -2, 2);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(2, -2, -2);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(2, 2, -2);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2, 2, 2);
+    //back
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2, -2, 2);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(-2, -2, -2);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(-2, 2, -2);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(-2, 2, 2);
+    //right
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2, 2, 2);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(-2, 2, -2);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(2, 2, -2);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2, 2, 2);
+    //left
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2, -2, 2);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(-2, -2, -2);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(2, -2, -2);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2, -2, 2);
+    //bottom
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2, 2, -2);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(-2, -2, -2);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(2, -2, -2);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2, 2, -2);
+    //top
+    glTexCoord2f(0.0, 0.0);
+    glVertex3f(-2, 2, 2);
+    glTexCoord2f(0.0, 1.0);
+    glVertex3f(-2, -2, 2);
+    glTexCoord2f(1.0, 1.0);
+    glVertex3f(2, -2, 2);
+    glTexCoord2f(1.0, 0.0);
+    glVertex3f(2, 2, 2);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_CULL_FACE);
+    glDisable(GL_BLEND);
+
+}
 void showBoundingBox()
 {
   int i,j;
+  if (addTexture == 1)
+      loadTexture();
+  else 
+  {
+      glColor4f(0.6, 0.6, 0.6, 1.0);
 
-  glColor4f(0.6,0.6,0.6,0);
+      glBegin(GL_LINES);
+      // front face
+      for (i = -2; i <= 2; i++)
+      {
+          glVertex3f(i, -2, -2);
+          glVertex3f(i, -2, 2);
+      }
+      for (j = -2; j <= 2; j++)
+      {
+          glVertex3f(-2, -2, j);
+          glVertex3f(2, -2, j);
+      }
 
-  glBegin(GL_LINES);
+      // back face
+      for (i = -2; i <= 2; i++)
+      {
+          glVertex3f(i, 2, -2);
+          glVertex3f(i, 2, 2);
+      }
+      for (j = -2; j <= 2; j++)
+      {
+          glVertex3f(-2, 2, j);
+          glVertex3f(2, 2, j);
+      }
 
-  // front face
-  for(i=-2; i<=2; i++)
-  {
-    glVertex3f(i,-2,-2);
-    glVertex3f(i,-2,2);
-  }
-  for(j=-2; j<=2; j++)
-  {
-    glVertex3f(-2,-2,j);
-    glVertex3f(2,-2,j);
-  }
+      // left face
+      for (i = -2; i <= 2; i++)
+      {
+          glVertex3f(-2, i, -2);
+          glVertex3f(-2, i, 2);
+      }
+      for (j = -2; j <= 2; j++)
+      {
+          glVertex3f(-2, -2, j);
+          glVertex3f(-2, 2, j);
+      }
 
-  // back face
-  for(i=-2; i<=2; i++)
-  {
-    glVertex3f(i,2,-2);
-    glVertex3f(i,2,2);
-  }
-  for(j=-2; j<=2; j++)
-  {
-    glVertex3f(-2,2,j);
-    glVertex3f(2,2,j);
-  }
+      // right face
+      for (i = -2; i <= 2; i++)
+      {
+          glVertex3f(2, i, -2);
+          glVertex3f(2, i, 2);
+      }
+      for (j = -2; j <= 2; j++)
+      {
+          glVertex3f(2, -2, j);
+          glVertex3f(2, 2, j);
+      }
 
-  // left face
-  for(i=-2; i<=2; i++)
-  {
-    glVertex3f(-2,i,-2);
-    glVertex3f(-2,i,2);
+      glEnd();
   }
-  for(j=-2; j<=2; j++)
-  {
-    glVertex3f(-2,-2,j);
-    glVertex3f(-2,2,j);
-  }
-
-  // right face
-  for(i=-2; i<=2; i++)
-  {
-    glVertex3f(2,i,-2);
-    glVertex3f(2,i,2);
-  }
-  for(j=-2; j<=2; j++)
-  {
-    glVertex3f(2,-2,j);
-    glVertex3f(2,2,j);
-  }
-  glEnd();
-
   return;
 }
 void showInclinePlane(struct world* jello) {
-    glColor4f(0, 0, 0, 0);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glColor4f(0.1, 0, 0, 1.0);
     double a = jello->a;
     double b = jello->b;
     double c = jello->c;
     double d = jello->d;
     double z1, z2, z3, z4;
     //check if c is 0
-
     if (c != 0)
     {
          z1 = (-d - a * (2) - b * (2)) / c;
          z2 = (-d - a * (2) - b * (-2)) / c;
          z3 = (-d - a * (-2) - b * (2)) / c;
          z4 = (-d - a * (-2) - b * (-2)) / c;
-         glBegin(GL_TRIANGLE_STRIP);
+         glBegin(GL_QUADS);
          glVertex3f(2, 2, z1);
          glVertex3f(2, -2, z2);
-         glVertex3f(-2, 2, z3);
          glVertex3f(-2, -2, z4);
+         glVertex3f(-2, 2, z3);
+         glEnd();
+         glDisable(GL_BLEND);
+     
     }
     else
     {
         //glBegin(GL_TRIANGLE_STRIP);
-        glBegin(GL_TRIANGLE_STRIP);
+        glBegin(GL_QUADS);
         glVertex3f(2, (-d-(a*2))/b, 2);
         glVertex3f(2, ( - d - (a * -2)) / b, 2);
-        glVertex3f(-2, (-d - (a * 2)) / b, -2);
         glVertex3f(-2, (-d - (a * -2)) / b, -2);
+        glVertex3f(-2, (-d - (a * 2)) / b, -2);
+        glEnd();
+        glDisable(GL_BLEND);
+
     }
     
-    
-    
-    glEnd();
-
 }
 
