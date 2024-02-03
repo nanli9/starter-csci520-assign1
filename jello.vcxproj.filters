@@ -64,8 +64,5 @@
     <Image Include="glass.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="slime.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
