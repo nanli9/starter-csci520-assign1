@@ -39,7 +39,7 @@ int pointMap(int side, int i, int j)
   return r;
 }
 
-void showCube(struct world * jello)
+void showCube(struct world * jello, GLenum mode)
 {
   int i,j,k,ip,jp,kp;
   point r1,r2,r3; // aux variables
@@ -88,9 +88,11 @@ void showCube(struct world * jello)
         {
           if (i*j*k*(7-i)*(7-j)*(7-k) != 0) // not surface point
             continue;
-
+          //add name stack here
+          if (mode == GL_SELECT)
+              glLoadName(i*8*8+8*j+k);
           glBegin(GL_POINTS); // draw point
-            glColor4f(0,0,0,0.5);  
+            glColor4f(0,0,0,0.5);
             glVertex3f(jello->p[i][j][k].x,jello->p[i][j][k].y,jello->p[i][j][k].z);        
           glEnd();
 

@@ -49,6 +49,7 @@ void myinit()
   glEnable(GL_POLYGON_SMOOTH);
   glEnable(GL_LINE_SMOOTH);
 
+  glDepthRange(0.0,1.0);
   return; 
 }
 void world::findNeighbors() {
@@ -158,7 +159,7 @@ void display()
 
   glDisable(GL_CULL_FACE);
   if (jello.incPlanePresent == 1) {
-      showInclinePlane(&jello);
+      //showInclinePlane(&jello);
   }
   glEnable(GL_CULL_FACE);
   /* Lighting */
@@ -254,7 +255,7 @@ void display()
   glEnable(GL_DEPTH_TEST);
 
   // show the cube
-  showCube(&jello);
+  showCube(&jello,GL_RENDER);
 
   glDisable(GL_LIGHTING);
 
@@ -262,6 +263,7 @@ void display()
   showBoundingBox();
  
   glutSwapBuffers();
+  glFlush();
 }
 
 void doIdle()

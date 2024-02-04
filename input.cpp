@@ -7,6 +7,7 @@
 
 #include "jello.h"
 #include "input.h"
+#include "showCube.h"
 
 /* Write a screenshot, in the PPM format, to the specified filename, in PPM format */
 void saveScreenshot(int windowWidth, int windowHeight, char *filename)
@@ -75,11 +76,64 @@ void mouseMotionDrag(int x, int y)
       }
       else//pick a single point
       {
-
+          pickPoint(x,y);
       }
   }
 }
+#define BUFSIZE 512
 
+void pickPoint(int x,int y) {
+    //printf("point picked:");
+    GLuint selectBuf[BUFSIZE];
+    GLint hits;
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glSelectBuffer(BUFSIZE, selectBuf);
+    (void) glRenderMode(GL_SELECT);
+    glInitNames();
+    glPushName(0);
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    //creat pick matrix
+    gluPickMatrix((GLdouble) x,(GLdouble)(viewport[3]-y),5.0,5.0,viewport);
+
+    gluPerspective(90.0, 1.0, 0.01, 1000.0);
+    showCube(&jello,GL_SELECT);
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glFlush();
+
+    hits = glRenderMode(GL_RENDER);
+    processHits(hits, selectBuf);
+}
+void processHits(GLint hits, GLuint buffer[]) {
+    GLuint names, * ptr;
+
+    printf("***************hits = %d\n", hits);
+    //process hit here
+    ptr = (GLuint*) buffer;
+    for (int i = 0; i < hits; i++)
+    {
+        names = *ptr;
+        printf("number name of the hit %d\n", names);
+        ptr++;
+        printf("z1 is %g\n", (float) *ptr/0xfffffff);
+        ptr++;
+        printf("z2 is %g\n", (float) *ptr/0xfffffff);
+        ptr++;
+        printf("name is: ");
+        for (int j = 0; j < names; j++)
+        {
+            printf("%d ",*ptr);
+            ptr++;
+        }
+        printf("\n");
+    }
+
+}
 void mouseMotion (int x, int y)
 {
   g_vMousePos[0] = x;
@@ -91,6 +145,8 @@ void mouseButton(int button, int state, int x, int y)
   switch (button)
   {
     case GLUT_LEFT_BUTTON:
+      pickPoint(x, y);
+
       g_iLeftMouseButton = (state==GLUT_DOWN);
       //if left mouse is released
       if (state == GLUT_UP)
