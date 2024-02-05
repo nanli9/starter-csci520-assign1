@@ -204,7 +204,8 @@ point collisionHandler(struct world* jello, double a, double b, double c, double
             b = -b;
             c = -c;
             d = -d;
-            n = { a,b,c };
+            point newNormal = { a,b,c };
+            n = newNormal;
         }
     }
     double fx = a * x + b * y + c * z + d;
