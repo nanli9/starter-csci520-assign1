@@ -226,6 +226,7 @@ void showCube(struct world * jello, GLenum mode)
           }
           glEnd();
         }
+       
     }  
   } // end for loop over faces
   glFrontFace(GL_CCW);
