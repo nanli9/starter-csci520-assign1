@@ -151,7 +151,8 @@ void mouseButton(int button, int state, int x, int y)
       //if left mouse is released
       if (state == GLUT_UP)
       {
-          jello.userInputForce = {0,0,0};
+          point f = { 0,0,0 };
+          jello.userInputForce = f;
       }
       break;
     case GLUT_MIDDLE_BUTTON:
