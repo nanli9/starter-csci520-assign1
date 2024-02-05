@@ -108,16 +108,27 @@ void world::processNeighbors(int i, int j, int k, int di, int dj, int dk,SpringT
         pointIndex p = {ip,jp,kp};
         if (type == structuralType)
         {
-            neighborsInfo[i][j][k].structuralNeighborList.push_back({ 1.0/7.0,p});
+            neighbor n = { 1.0 / 7.0,p };
+            neighborsInfo[i][j][k].structuralNeighborList.push_back(n);
         }
-        else if(type == bendType)
-            neighborsInfo[i][j][k].bendNeighborList.push_back({ 2.0/7.0,p });
+        else if (type == bendType)
+        {
+            neighbor n = { 2.0 / 7.0,p };
+            neighborsInfo[i][j][k].bendNeighborList.push_back(n);
+
+        }
         else {
             //check the rest length for two type of shear type
-            if(abs(di)==1&& abs(dj) == 1&& abs(dk) == 1)
-                neighborsInfo[i][j][k].shearNeighborList.push_back({ sqrt(3)/7.0,p });
+            if (abs(di) == 1 && abs(dj) == 1 && abs(dk) == 1)
+            {
+                neighbor n = { sqrt(3) / 7.0,p };
+                neighborsInfo[i][j][k].shearNeighborList.push_back(n);
+            }
             else
-                neighborsInfo[i][j][k].shearNeighborList.push_back({ sqrt(2)/7.0,p });
+            {
+                neighbor n = { sqrt(2) / 7.0,p };
+                neighborsInfo[i][j][k].shearNeighborList.push_back(n);
+            }
         }
     }
 }
