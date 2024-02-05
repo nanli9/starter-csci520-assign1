@@ -17,7 +17,7 @@ COMPILERFLAGS = -O2
 
 all: jello createWorld
 
-jello: jello.o showCube.o input.o physics.o ppm.o pic.o
+jello: jello.o showCube.o input.o physics.o ppm.o pic.o stb_image.o
 	$(COMPILER) $(COMPILERFLAGS) -o $@ $^ $(LIBRARIES)
 
 jello.o: jello.cpp *.h
@@ -30,7 +30,8 @@ physics.o: physics.cpp *.h
 	$(COMPILER) -c $(COMPILERFLAGS) physics.cpp
 createWorld: createWorld.cpp
 	$(COMPILER) $(COMPILERFLAGS) -o createWorld createWorld.cpp
-
+stb_image: stb_image.cpp *.h
+	$(COMPILER) $(COMPILERFLAGS) -o stb_image.cpp
 clean:
 	-rm -rf *.o createWorld jello
 
