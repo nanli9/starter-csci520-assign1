@@ -206,11 +206,9 @@ void showCube(struct world * jello, GLenum mode)
           counter[i+1][j+1]++;
         }
 
-      
         /* the actual rendering */
         for (j=1; j<=7; j++) 
         {
-
           if (faceFactor  > 0)
             glFrontFace(GL_CCW); // the usual definition of front face
           else
@@ -233,7 +231,7 @@ void showCube(struct world * jello, GLenum mode)
   glFrontFace(GL_CCW);
 }
 void loadTexture() {
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
     unsigned int texture;
     glGenTextures(1, &texture);
     // set the texture wrapping parameters
@@ -259,14 +257,13 @@ void loadTexture() {
     stbi_image_free(data);
     glEnable(GL_TEXTURE_2D);
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-    //test
-
+    //use blend to make the texture transparent
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glDisable(GL_CULL_FACE);
     glColor4f(0.6, 0.6, 0.6, 0.2);
     glBegin(GL_QUADS);
-    //front
+    //front face texture
     glTexCoord2f(0.0, 0.0);
     glVertex3f(2, -2, 2);
     glTexCoord2f(0.0, 1.0);
@@ -275,7 +272,7 @@ void loadTexture() {
     glVertex3f(2, 2, -2);
     glTexCoord2f(1.0, 0.0);
     glVertex3f(2, 2, 2);
-    //back
+    //back face texture
     glTexCoord2f(0.0, 0.0);
     glVertex3f(-2, -2, 2);
     glTexCoord2f(0.0, 1.0);
@@ -284,7 +281,7 @@ void loadTexture() {
     glVertex3f(-2, 2, -2);
     glTexCoord2f(1.0, 0.0);
     glVertex3f(-2, 2, 2);
-    //right
+    //right face texture
     glTexCoord2f(0.0, 0.0);
     glVertex3f(-2, 2, 2);
     glTexCoord2f(0.0, 1.0);
@@ -293,7 +290,7 @@ void loadTexture() {
     glVertex3f(2, 2, -2);
     glTexCoord2f(1.0, 0.0);
     glVertex3f(2, 2, 2);
-    //left
+    //left face texture
     glTexCoord2f(0.0, 0.0);
     glVertex3f(-2, -2, 2);
     glTexCoord2f(0.0, 1.0);
@@ -302,7 +299,7 @@ void loadTexture() {
     glVertex3f(2, -2, -2);
     glTexCoord2f(1.0, 0.0);
     glVertex3f(2, -2, 2);
-    //bottom
+    //bottom face texture
     glTexCoord2f(0.0, 0.0);
     glVertex3f(-2, 2, -2);
     glTexCoord2f(0.0, 1.0);
@@ -311,7 +308,7 @@ void loadTexture() {
     glVertex3f(2, -2, -2);
     glTexCoord2f(1.0, 0.0);
     glVertex3f(2, 2, -2);
-    //top
+    //top face texture
     glTexCoord2f(0.0, 0.0);
     glVertex3f(-2, 2, 2);
     glTexCoord2f(0.0, 1.0);
@@ -411,7 +408,6 @@ void showInclinePlane(struct world* jello) {
          glVertex3f(-2, 2, z3);
          glEnd();
          glDisable(GL_BLEND);
-     
     }
     else
     {
@@ -422,7 +418,6 @@ void showInclinePlane(struct world* jello) {
         glVertex3f(-2, (-d - (a * 2)) / b, -2);
         glEnd();
         glDisable(GL_BLEND);
-
     }
     
 }

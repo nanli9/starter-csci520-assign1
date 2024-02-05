@@ -148,7 +148,7 @@ void mouseButton(int button, int state, int x, int y)
       pickPoint(x, y);
 
       g_iLeftMouseButton = (state==GLUT_DOWN);
-      //if left mouse is released
+      //if left mouse is released then the user input force is gone
       if (state == GLUT_UP)
       {
           point f = { 0,0,0 };

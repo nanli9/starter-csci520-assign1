@@ -21,13 +21,13 @@ void computeAcceleration(struct world * jello, struct point a[8][8][8])
                 a[i][j][k].x = netForce.x/jello->mass;
                 a[i][j][k].y = netForce.y/jello->mass;
                 a[i][j][k].z = netForce.z/jello->mass;
-                
             }
         }
     }
 
 }
 point findNetForce(struct world* jello,int i,int j,int k) {
+    //initialize the forces
     point structuralForce = { 0.0, 0.0, 0.0 };
     point shearForce = { 0.0, 0.0, 0.0 };
     point bendForce = { 0.0, 0.0, 0.0 };
@@ -35,6 +35,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
     point dampForce = { 0.0, 0.0, 0.0 };
     point externalForce = { 0.0, 0.0, 0.0 };
     point collisionForce = { 0.0, 0.0, 0.0 };
+    //go over the structural springs
     for (int x = 0; x < jello->neighborsInfo[i][j][k].structuralNeighborList.size(); x++) {
         int i2, j2, k2;
         i2 = jello->neighborsInfo[i][j][k].structuralNeighborList[x].p.x;
@@ -50,6 +51,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
         dampForce = calculateDamping(jello->v[i][j][k], jello->v[i2][j2][k2],jello->dElastic, L);
         pSUM(structuralForce, dampForce, structuralForce);
     };
+    //go over the bend springs
     for (int x = 0; x < jello->neighborsInfo[i][j][k].bendNeighborList.size(); x++) {
         int i2, j2, k2;
         i2 = jello->neighborsInfo[i][j][k].bendNeighborList[x].p.x;
@@ -65,7 +67,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
         dampForce = calculateDamping(jello->v[i][j][k], jello->v[i2][j2][k2], jello->dElastic, L);
         pSUM(bendForce, dampForce, bendForce);
     };
-
+    //go over the shear springs
     for (int x = 0; x < jello->neighborsInfo[i][j][k].shearNeighborList.size(); x++) {
         int i2, j2, k2;
         i2 = jello->neighborsInfo[i][j][k].shearNeighborList[x].p.x;
@@ -89,18 +91,16 @@ point findNetForce(struct world* jello,int i,int j,int k) {
     collisionForce = collisionForce + collisionHandler(jello,0.0,1.0,0.0,2.0,i,j,k);
     collisionForce = collisionForce + collisionHandler(jello,-1.0,0.0,0.0,2.0,i,j,k);
     collisionForce = collisionForce + collisionHandler(jello,1.0,0.0,0.0,2.0,i,j,k);
-    /*point a = { 0.0, 0.0, 0.1 };
-    point b = { 0.0, 0.0, 0.1 };
-    a = a+b;
-    a;*/
+    
     //collision check for incline plane
     if(jello->incPlanePresent==1)
         collisionForce = collisionForce + collisionHandler(jello, jello->a, jello->b, jello->c, jello->d, i, j, k);
+    //add up the forces without user input
     netForce.x = structuralForce.x + bendForce.x + shearForce.x + externalForce.x + collisionForce.x;
     netForce.y = structuralForce.y + bendForce.y+ shearForce.y+ externalForce.y + collisionForce.y;
     netForce.z = structuralForce.z + bendForce.z+ shearForce.z+ externalForce.z + collisionForce.z;
+    //add user input forces
     if (jello->userInputForce.x!=0 || jello->userInputForce.y != 0) {
-        
         netForce.x = netForce.x + jello->userInputForce.x;
         netForce.y = netForce.y + jello->userInputForce.y;
     }
@@ -198,6 +198,7 @@ point collisionHandler(struct world* jello, double a, double b, double c, double
     {
         double divisor = sqrt(a * a + b * b + c * c);
         point vector = { -d * a / divisor ,-d * b / divisor ,-d * c / divisor };
+        //if the normal is point outward the origin, flip the sign
         if (vector.x * n.x + vector.y * n.y + vector.z * n.z > 0)
         {
             a = -a;
@@ -223,6 +224,7 @@ point collisionHandler(struct world* jello, double a, double b, double c, double
     return collisionForce;
 }
 point userInputForce(struct world* jello) {
+    //apply force to single point
     point userInputForce = { 0.0,0.0,0.0 };
     return userInputForce;
 }

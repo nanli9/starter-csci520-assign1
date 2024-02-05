@@ -304,7 +304,13 @@ void doIdle()
   {
     // insert code which appropriately performs one step of the cube simulation:
   }
-  RK4(&jello);
+  for (i = 1; i <= jello.n; i++)
+  {
+      if (jello.integrator[0] == 'E') // Euler
+          Euler(&jello);
+      if (jello.integrator[0] == 'R') // RK4
+          RK4(&jello);
+  }
 
   glutPostRedisplay();
 }
