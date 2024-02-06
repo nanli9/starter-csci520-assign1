@@ -159,7 +159,7 @@ void reshape(int w, int h)
 
 void display()
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -170,6 +170,7 @@ void display()
 
   glDisable(GL_CULL_FACE);
   if (jello.incPlanePresent == 1) {
+      glStencilMask(0x00);
       showInclinePlane(&jello);
   }
   glEnable(GL_CULL_FACE);
@@ -251,7 +252,7 @@ void display()
   glLightfv(GL_LIGHT##i, GL_DIFFUSE, lKd##i);\
   glLightfv(GL_LIGHT##i, GL_SPECULAR, lKs##i);\
   glEnable(GL_LIGHT##i)
-  
+
   LIGHTSETUP (0);
   LIGHTSETUP (1);
   LIGHTSETUP (2);
@@ -264,9 +265,13 @@ void display()
   // enable lighting
   glEnable(GL_LIGHTING);    
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_STENCIL_TEST);
+  glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+  glStencilOp(GL_ZERO, GL_ZERO, GL_REPLACE);
 
   // show the cube
-  showCube(&jello,GL_RENDER);
+
+  showCube(&jello);
 
   glDisable(GL_LIGHTING);
 
@@ -274,7 +279,6 @@ void display()
   showBoundingBox();
  
   glutSwapBuffers();
-  glFlush();
 }
 
 void doIdle()

@@ -39,7 +39,7 @@ int pointMap(int side, int i, int j)
   return r;
 }
 
-void showCube(struct world * jello, GLenum mode)
+void showCube(struct world * jello)
 {
   int i,j,k,ip,jp,kp;
   point r1,r2,r3; // aux variables
@@ -88,9 +88,7 @@ void showCube(struct world * jello, GLenum mode)
         {
           if (i*j*k*(7-i)*(7-j)*(7-k) != 0) // not surface point
             continue;
-          //add name stack here
-          if (mode == GL_SELECT)
-              glLoadName(i*8*8+8*j+k);
+          glStencilMask(0xFF);
           glBegin(GL_POINTS); // draw point
             glColor4f(0,0,0,0.5);
             glVertex3f(jello->p[i][j][k].x,jello->p[i][j][k].y,jello->p[i][j][k].z);        
@@ -99,7 +97,8 @@ void showCube(struct world * jello, GLenum mode)
           //
           //if ((i!=7) || (j!=7) || (k!=7))
           //  continue;
-
+          // 
+          glStencilMask(0x00);
           glBegin(GL_LINES);      
           // structural
           if (structural == 1)
@@ -158,6 +157,7 @@ void showCube(struct world * jello, GLenum mode)
   
   else
   {
+
     glPolygonMode(GL_FRONT, GL_FILL); 
     
     for (face=1; face <= 6; face++) 
@@ -205,7 +205,7 @@ void showCube(struct world * jello, GLenum mode)
           pSUM(normal[i+1][j+1],r3,normal[i+1][j+1]);
           counter[i+1][j+1]++;
         }
-
+        //disable writing
         /* the actual rendering */
         for (j=1; j<=7; j++) 
         {
@@ -332,7 +332,7 @@ void showBoundingBox()
   else 
   {
       glColor4f(0.6, 0.6, 0.6, 1.0);
-
+      //disable writing
       glBegin(GL_LINES);
       // front face
       for (i = -2; i <= 2; i++)
@@ -390,6 +390,7 @@ void showInclinePlane(struct world* jello) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glColor4f(0.1, 0, 0, 1.0);
+    //disable writing
     double a = jello->a;
     double b = jello->b;
     double c = jello->c;
