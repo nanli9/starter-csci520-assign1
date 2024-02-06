@@ -9,7 +9,6 @@
 #include "showCube.h"
 #include "physics.h"
 #include "stb_image.h"
-
 int pointMap(int side, int i, int j)
 {
   int r;
@@ -89,8 +88,11 @@ void showCube(struct world * jello)
           if (i*j*k*(7-i)*(7-j)*(7-k) != 0) // not surface point
             continue;
           glStencilMask(0xFF);
+          glColor4f(0, 0, 0, 0.5);
           glBegin(GL_POINTS); // draw point
-            glColor4f(0,0,0,0.5);
+            if(mark==1)
+                glColor4f(1.0, 0, 0, 0.5);
+            
             glVertex3f(jello->p[i][j][k].x,jello->p[i][j][k].y,jello->p[i][j][k].z);        
           glEnd();
 

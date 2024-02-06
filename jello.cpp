@@ -27,7 +27,7 @@ int g_iLeftMouseButton,g_iMiddleMouseButton,g_iRightMouseButton;
 int sprite=0;
 
 // these variables control what is displayed on screen
-int shear=0, bend=0, structural=1, pause=0, viewingMode=0, saveScreenToFile=0,addTexture=0, toggleSinglePoint=0;
+int shear=0, bend=0, structural=1, pause=0, viewingMode=0, saveScreenToFile=0,addTexture=0, toggleSinglePoint=0,mark=0;
 
 struct world jello;
 
@@ -164,6 +164,7 @@ void display()
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
+
   // camera parameters are Phi, Theta, R
   gluLookAt(R * cos(Phi) * cos (Theta), R * sin(Phi) * cos (Theta), R * sin (Theta),
 	        0.0,0.0,0.0, 0.0,0.0,1.0);
@@ -277,7 +278,8 @@ void display()
 
   // show the bounding box
   showBoundingBox();
- 
+  glStencilMask(0xFF);
+
   glutSwapBuffers();
 }
 

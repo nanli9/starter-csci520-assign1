@@ -69,7 +69,7 @@ struct neighbors {
     std::vector<neighbor> bendNeighborList;
 };
 // these variables control what is displayed on the screen
-extern int shear, bend, structural, pause, viewingMode, saveScreenToFile, addTexture,toggleSinglePoint;
+extern int shear, bend, structural, pause, viewingMode, saveScreenToFile, addTexture,toggleSinglePoint,mark;
 enum SpringType {
     structuralType = 1,
     shearType = 2,

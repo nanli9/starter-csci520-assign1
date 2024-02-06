@@ -21,6 +21,6 @@ void keyboardFunc (unsigned char key, int x, int y);
 // read/write world files
 void readWorld (char * fileName, struct world * jello);
 void writeWorld (char * fileName, struct world * jello);
-
+void pickPoint(int x, int y);
 #endif
 

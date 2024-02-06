@@ -76,12 +76,55 @@ void mouseMotionDrag(int x, int y)
       }
       else//pick a single point
       {
-          printf("stencil test");
+
           
       }
   }
 }
-
+void pickPoint(int x, int y)
+{
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    printf("stencil test\n");
+    int pixel[4];
+    glReadPixels(x, viewport[3] - y, 1, 1, GL_STENCIL_INDEX, GL_FLOAT, &pixel);
+    printf("%d\n", pixel[0]);
+    if (pixel[0])
+    {
+        GLfloat depth = 0.0f;
+        printf("depth test\n");
+        glReadPixels(x, viewport[3] - y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+        printf("%f\n", depth);
+        GLdouble modelview[16];
+        glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+       /* for (int i = 0; i < 16; i++)
+            printf("%.1f, ", modelview[i]);*/
+        GLdouble projection[16];
+        glGetDoublev(GL_PROJECTION_MATRIX, projection);
+        /*for (int i = 0; i < 16; i++)
+            printf("%.1f, ", projection[i]);*/
+        GLdouble a,b,c;
+        gluUnProject(x, viewport[3] - y, depth, modelview, projection, viewport,&a,&b,&c);
+        printf("a: %f\n", a);
+        printf("b: %f\n", b);
+        printf("c: %f\n", c);
+        for (int i = 0; i <= 7; i++)
+            for (int j = 0; j <= 7; j++)
+                for (int k = 0; k <= 7; k++)
+                {
+                    if (fabs(jello.p[i][j][k].x-a)<=0.01&& fabs(jello.p[i][j][k].y - b) <= 0.01&& fabs(jello.p[i][j][k].z - c) <= 0.01)
+                    {
+                        printf("matched\n");
+                        printf("i: %d\n",i);
+                        printf("j: %d\n",j);
+                        printf("k: %d\n",k);
+                        //apply force to the picked point
+                        mark = 1;
+                    }
+                }
+    }
+    
+}
 void mouseMotion (int x, int y)
 {
   g_vMousePos[0] = x;
@@ -93,7 +136,7 @@ void mouseButton(int button, int state, int x, int y)
   switch (button)
   {
     case GLUT_LEFT_BUTTON:
-
+        pickPoint(x, y);
       g_iLeftMouseButton = (state==GLUT_DOWN);
       //if left mouse is released then the user input force is gone
       if (state == GLUT_UP)
