@@ -170,7 +170,7 @@ void display()
 
   glDisable(GL_CULL_FACE);
   if (jello.incPlanePresent == 1) {
-      //showInclinePlane(&jello);
+      showInclinePlane(&jello);
   }
   glEnable(GL_CULL_FACE);
   /* Lighting */

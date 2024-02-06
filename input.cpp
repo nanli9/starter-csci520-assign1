@@ -65,7 +65,7 @@ void mouseMotionDrag(int x, int y)
       {
           printf("move in x: %d\n", vMouseDelta[0]);
           printf("move in y: %d\n", vMouseDelta[1]);
-          double k = 0.1;
+          double k = 10.0;
           point userInputForce = { vMouseDelta[0] ,vMouseDelta[1],0 };
           userInputForce = -k * userInputForce;
           jello.userInputForce = userInputForce;
@@ -99,6 +99,7 @@ void pickPoint(int x,int y) {
     //creat pick matrix
     gluPickMatrix((GLdouble) x,(GLdouble)(viewport[3]-y),5.0,5.0,viewport);
 
+    printf("-----------------%d,%d-------------\n",x, viewport[3] - y);
     gluPerspective(90.0, 1.0, 0.01, 1000.0);
     showCube(&jello,GL_SELECT);
 

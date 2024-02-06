@@ -167,7 +167,7 @@ point trilinearInterpolation(point grid, struct world* jello) {
     alpha = grid.x - x;
     beta = grid.y - y;
     gamma = grid.z - z;
-    if (x<jello->resolution&&y < jello->resolution&&z < jello->resolution&&x>=0&&y>=0&&z>=0)
+    if (x<jello->resolution-1&&y < jello->resolution-1&&z < jello->resolution-1&&x>=0&&y>=0&&z>=0)
     {
         point A000 = jello->forceField[x * jello->resolution * jello->resolution + y * jello->resolution + z];
         point A010 = jello->forceField[x * jello->resolution * jello->resolution + (y + 1) * jello->resolution + z];
