@@ -13,4 +13,7 @@ extra credit:
 1.add an incline plane with collision detection and handler.  
 2.add an new interactive key "t": it will load a texture into the bounding box, the texture will be discarded if "t" is pressed again.
 (stb_image.h file is added to load the image."https://github.com/nothings/stb/blob/master/stb_image.h")
-
+3.Users can apply force to the entire jello by dragging the mouse at any place of the screen.
+4. use key 'q' to toggle whether users can select the single point then act the force on it(wireframe mode only). After press 'q', users can
+move the mouse to the point and the point will become red if selected. Then users can apply force to the single point by using the left mouse key
+to drag.

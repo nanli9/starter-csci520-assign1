@@ -67,7 +67,7 @@ void mouseMotionDrag(int x, int y)
           printf("move in y: %d\n", vMouseDelta[1]);
           double k = 10.0;
           point userInputForce = { vMouseDelta[0] ,vMouseDelta[1],0 };
-          userInputForce = -k * userInputForce;
+          userInputForce = k * userInputForce;
           jello.userInputForce = userInputForce;
           printf("force (%f,%f,%f) added\n", userInputForce.x, userInputForce.y, userInputForce.z);
 
@@ -78,9 +78,9 @@ void mouseMotionDrag(int x, int y)
       {
           if (mark)
           {
-              //apply force here
+              //apply force here for single points
               double k = 10.0;
-              point userInputForce = { vMouseDelta[0] ,vMouseDelta[1],0 };
+              point userInputForce = { vMouseDelta[0] ,vMouseDelta[1],0};
               userInputForce = -k * userInputForce;
               jello.userInputForce = userInputForce;
           }
@@ -93,14 +93,11 @@ void pickPoint(int x, int y)
 {
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
-    printf("stencil test\n");
     int pixel[4];
     glReadPixels(x, viewport[3] - y, 1, 1, GL_STENCIL_INDEX, GL_FLOAT, &pixel);
-    printf("%d\n", pixel[0]);
     if (pixel[0])
     {
         GLfloat depth = 0.0f;
-        printf("depth test\n");
         glReadPixels(x, viewport[3] - y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
         printf("%f\n", depth);
         GLdouble modelview[16];
@@ -108,6 +105,7 @@ void pickPoint(int x, int y)
         GLdouble projection[16];
         glGetDoublev(GL_PROJECTION_MATRIX, projection);
         GLdouble a,b,c;
+        //use unproject to get the local posistion 
         gluUnProject(x, viewport[3] - y, depth, modelview, projection, viewport,&a,&b,&c);
         printf("a: %f\n", a);
         printf("b: %f\n", b);
