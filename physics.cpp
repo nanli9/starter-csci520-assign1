@@ -100,9 +100,21 @@ point findNetForce(struct world* jello,int i,int j,int k) {
     netForce.y = structuralForce.y + bendForce.y+ shearForce.y+ externalForce.y + collisionForce.y;
     netForce.z = structuralForce.z + bendForce.z+ shearForce.z+ externalForce.z + collisionForce.z;
     //add user input forces
-    if (jello->userInputForce.x!=0 || jello->userInputForce.y != 0) {
-        netForce.x = netForce.x + jello->userInputForce.x;
-        netForce.y = netForce.y + jello->userInputForce.y;
+    
+    if (mark)
+    {
+        if (i == pickedPoint[0] && j == pickedPoint[1]&& k == pickedPoint[2])
+        {
+            netForce.x = netForce.x + jello->userInputForce.x;
+            netForce.y = netForce.y + jello->userInputForce.y;
+        }
+    }
+    else
+    {
+        if (jello->userInputForce.x != 0 || jello->userInputForce.y != 0) {
+            netForce.x = netForce.x + jello->userInputForce.x;
+            netForce.y = netForce.y + jello->userInputForce.y;
+        }
     }
     return netForce;
 }

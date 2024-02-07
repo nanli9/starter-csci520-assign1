@@ -90,7 +90,7 @@ void showCube(struct world * jello)
           glStencilMask(0xFF);
           glColor4f(0, 0, 0, 0.5);
           glBegin(GL_POINTS); // draw point
-            if(mark==1)
+            if(mark==1&& pickedPoint[0]==i&& pickedPoint[1] == j&& pickedPoint[2] == k)
                 glColor4f(1.0, 0, 0, 0.5);
             
             glVertex3f(jello->p[i][j][k].x,jello->p[i][j][k].y,jello->p[i][j][k].z);        

@@ -27,7 +27,7 @@ int g_iLeftMouseButton,g_iMiddleMouseButton,g_iRightMouseButton;
 int sprite=0;
 
 // these variables control what is displayed on screen
-int shear=0, bend=0, structural=1, pause=0, viewingMode=0, saveScreenToFile=0,addTexture=0, toggleSinglePoint=0,mark=0;
+int shear=0, bend=0, structural=1, pause=0, viewingMode=0, saveScreenToFile=0,addTexture=0, toggleSinglePoint=0,mark=0,pickedPoint[3];
 
 struct world jello;
 
@@ -309,14 +309,15 @@ void doIdle()
   if (pause == 0)
   {
     // insert code which appropriately performs one step of the cube simulation:
+      for (i = 1; i <= jello.n; i++)
+      {
+          if (jello.integrator[0] == 'E') // Euler
+              Euler(&jello);
+          if (jello.integrator[0] == 'R') // RK4
+              RK4(&jello);
+      }
   }
-  for (i = 1; i <= jello.n; i++)
-  {
-      if (jello.integrator[0] == 'E') // Euler
-          Euler(&jello);
-      if (jello.integrator[0] == 'R') // RK4
-          RK4(&jello);
-  }
+  
 
   glutPostRedisplay();
 }

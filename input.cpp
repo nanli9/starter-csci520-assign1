@@ -74,10 +74,18 @@ void mouseMotionDrag(int x, int y)
           g_vMousePos[0] = x;
           g_vMousePos[1] = y;
       }
-      else//pick a single point
+      else
       {
+          if (mark)
+          {
+              //apply force here
+              double k = 10.0;
+              point userInputForce = { vMouseDelta[0] ,vMouseDelta[1],0 };
+              userInputForce = -k * userInputForce;
+              jello.userInputForce = userInputForce;
+          }
 
-          
+
       }
   }
 }
@@ -97,12 +105,8 @@ void pickPoint(int x, int y)
         printf("%f\n", depth);
         GLdouble modelview[16];
         glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
-       /* for (int i = 0; i < 16; i++)
-            printf("%.1f, ", modelview[i]);*/
         GLdouble projection[16];
         glGetDoublev(GL_PROJECTION_MATRIX, projection);
-        /*for (int i = 0; i < 16; i++)
-            printf("%.1f, ", projection[i]);*/
         GLdouble a,b,c;
         gluUnProject(x, viewport[3] - y, depth, modelview, projection, viewport,&a,&b,&c);
         printf("a: %f\n", a);
@@ -118,7 +122,10 @@ void pickPoint(int x, int y)
                         printf("i: %d\n",i);
                         printf("j: %d\n",j);
                         printf("k: %d\n",k);
-                        //apply force to the picked point
+                        //mark the picked point
+                        pickedPoint[0] = i;
+                        pickedPoint[1] = j;
+                        pickedPoint[2] = k;
                         mark = 1;
                     }
                 }
@@ -129,6 +136,8 @@ void mouseMotion (int x, int y)
 {
   g_vMousePos[0] = x;
   g_vMousePos[1] = y;
+  if(toggleSinglePoint)
+      pickPoint(x, y);
 }
 
 void mouseButton(int button, int state, int x, int y)
@@ -136,7 +145,7 @@ void mouseButton(int button, int state, int x, int y)
   switch (button)
   {
     case GLUT_LEFT_BUTTON:
-        pickPoint(x, y);
+        
       g_iLeftMouseButton = (state==GLUT_DOWN);
       //if left mouse is released then the user input force is gone
       if (state == GLUT_UP)
