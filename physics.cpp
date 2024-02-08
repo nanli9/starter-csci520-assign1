@@ -99,8 +99,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
     netForce.x = structuralForce.x + bendForce.x + shearForce.x + externalForce.x + collisionForce.x;
     netForce.y = structuralForce.y + bendForce.y+ shearForce.y+ externalForce.y + collisionForce.y;
     netForce.z = structuralForce.z + bendForce.z+ shearForce.z+ externalForce.z + collisionForce.z;
-    //add user input forces
-    
+    //add user input forces for single points or all points
     if (mark)
     {
         if (i == pickedPoint[0] && j == pickedPoint[1]&& k == pickedPoint[2])
@@ -234,11 +233,6 @@ point collisionHandler(struct world* jello, double a, double b, double c, double
     point dampingForce = -jello->dCollision*jello->v[i][j][k]*n;
     collisionForce = elasticityForce + dampingForce;
     return collisionForce;
-}
-point userInputForce(struct world* jello) {
-    //apply force to single point
-    point userInputForce = { 0.0,0.0,0.0 };
-    return userInputForce;
 }
 /* performs one step of Euler Integration */
 /* as a result, updates the jello structure */

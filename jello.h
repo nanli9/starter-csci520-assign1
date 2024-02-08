@@ -48,11 +48,6 @@ struct point
        point res = { a * b.x, a * b.y, a * b.z };
        return res;
    }
-   //wip
-   /*point& operator +=(const point& a) {
-       point res = { a.x + x, a.y + y, a.z + z };
-       return res;
-   }*/
 };
 struct pointIndex {
     int x;
@@ -92,8 +87,8 @@ struct world
   struct point * forceField; // pointer to the array of values of the force field
   struct point p[8][8][8]; // position of the 512 control points
   struct point v[8][8][8]; // velocities of the 512 control points
-  struct neighbors neighborsInfo[8][8][8];
-  void findNeighbors();
+  struct neighbors neighborsInfo[8][8][8]; //Neighbors for structural shear bend springs for each points
+  void findNeighbors();//find Neighbors for structural shear bend springs
   void processNeighbors(int i,int j,int k,int di,int dj,int dk,SpringType type);
   point userInputForce = {0.0,0.0,0.0};//force from user's input
 };

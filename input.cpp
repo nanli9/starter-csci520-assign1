@@ -76,6 +76,7 @@ void mouseMotionDrag(int x, int y)
       }
       else
       {
+          //if it is single point selection
           if (mark)
           {
               //apply force here for single points
@@ -95,6 +96,7 @@ void pickPoint(int x, int y)
     glGetIntegerv(GL_VIEWPORT, viewport);
     int pixel[4];
     glReadPixels(x, viewport[3] - y, 1, 1, GL_STENCIL_INDEX, GL_FLOAT, &pixel);
+    //if the click pass stencil test means it click one of 512 points
     if (pixel[0])
     {
         GLfloat depth = 0.0f;
@@ -136,6 +138,10 @@ void mouseMotion (int x, int y)
   g_vMousePos[1] = y;
   if(toggleSinglePoint)
       pickPoint(x, y);
+  else
+  {
+      mark = 0;
+  }
 }
 
 void mouseButton(int button, int state, int x, int y)
