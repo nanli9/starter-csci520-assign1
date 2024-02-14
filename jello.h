@@ -40,6 +40,10 @@ struct point
        point res = { a.x + b.x, a.y + b.y, a.z + b.z };
        return res;
    }
+   friend point operator -(const point a, const point b) {
+       point res = { a.x - b.x, a.y - b.y, a.z - b.z };
+       return res;
+   }
    friend point operator *(const point a, const point b) {
        point res = { a.x*b.x, a.y*b.y, a.z*b.z };
        return res;

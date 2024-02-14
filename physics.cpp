@@ -45,9 +45,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
         double distance = distanceBetweenPoints(jello, i, j, k, i2, j2, k2);
         point L = getL(jello, i, j, k, i2, j2, k2);
         nomralize(L);
-        structuralForce.x += -jello->kElastic * (distance - restLength)* L.x;
-        structuralForce.y += -jello->kElastic * (distance - restLength)* L.y;
-        structuralForce.z += -jello->kElastic * (distance - restLength)* L.z;
+        structuralForce = structuralForce + (-jello->kElastic * (distance - restLength) * L);
         dampForce = calculateDamping(jello->v[i][j][k], jello->v[i2][j2][k2],jello->dElastic, L);
         pSUM(structuralForce, dampForce, structuralForce);
     };
@@ -61,9 +59,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
         double distance = distanceBetweenPoints(jello, i, j, k, i2, j2, k2);
         point L = getL(jello, i, j, k, i2, j2, k2);
         nomralize(L);
-        bendForce.x += -jello->kElastic * (distance - restLength) * L.x;
-        bendForce.y += -jello->kElastic * (distance - restLength) * L.y;
-        bendForce.z += -jello->kElastic * (distance - restLength) * L.z;
+        bendForce = bendForce + (-jello->kElastic * (distance - restLength) * L);
         dampForce = calculateDamping(jello->v[i][j][k], jello->v[i2][j2][k2], jello->dElastic, L);
         pSUM(bendForce, dampForce, bendForce);
     };
@@ -77,9 +73,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
         double distance = distanceBetweenPoints(jello, i, j, k, i2, j2, k2);
         point L = getL(jello, i, j, k, i2, j2, k2);
         nomralize(L);
-        shearForce.x += -jello->kElastic * (distance - restLength) * L.x;
-        shearForce.y += -jello->kElastic * (distance - restLength) * L.y;
-        shearForce.z += -jello->kElastic * (distance - restLength) * L.z;
+        shearForce = shearForce + (-jello->kElastic * (distance - restLength)*L);
         dampForce = calculateDamping(jello->v[i][j][k], jello->v[i2][j2][k2], jello->dElastic, L);
         pSUM(shearForce, dampForce, shearForce);
     };
@@ -96,18 +90,18 @@ point findNetForce(struct world* jello,int i,int j,int k) {
     if(jello->incPlanePresent==1)
         collisionForce = collisionForce + collisionHandler(jello, jello->a, jello->b, jello->c, jello->d, i, j, k);
     //add up the forces without user input
-    netForce.x = structuralForce.x + bendForce.x + shearForce.x + externalForce.x + collisionForce.x;
-    netForce.y = structuralForce.y + bendForce.y+ shearForce.y+ externalForce.y + collisionForce.y;
-    netForce.z = structuralForce.z + bendForce.z+ shearForce.z+ externalForce.z + collisionForce.z;
+    netForce = structuralForce + bendForce + shearForce + externalForce + collisionForce;
     //add user input forces for single points or all points
     if (mark)
     {
+        //apply force to certain point
         if (i == pickedPoint[0] && j == pickedPoint[1]&& k == pickedPoint[2])
         {
             netForce.x = netForce.x + jello->userInputForce.x;
             netForce.y = netForce.y + jello->userInputForce.y;
         }
     }
+    //apply force to all the points
     else
     {
         if (jello->userInputForce.x != 0 || jello->userInputForce.y != 0) {
@@ -117,6 +111,7 @@ point findNetForce(struct world* jello,int i,int j,int k) {
     }
     return netForce;
 }
+//some helper function to make calculation code simple
 double distanceBetweenPoints(struct world* jello,int x1, int y1, int z1,int x2,int y2,int z2) {
     double x, y, z;
     x = pow((jello->p[x1][y1][z1].x - jello->p[x2][y2][z2].x),2);
@@ -159,6 +154,7 @@ point findExternalForce(struct world * jello, int i, int j, int k) {
 point getGrid(struct world* jello, int i, int j, int k) {
     point pos = jello->p[i][j][k];
     //double h = 4 / jello->resolution;
+    //use inverse to save some calculation time
     double inverseh = jello->resolution/4;
     double x, y, z;
     x = (2 + pos.x) * inverseh;

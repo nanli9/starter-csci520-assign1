@@ -390,7 +390,6 @@ void showBoundingBox()
 }
 void showInclinePlane(struct world* jello) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
     glColor4f(0.1, 0, 0, 1.0);
     //disable writing
     double a = jello->a;
@@ -411,7 +410,6 @@ void showInclinePlane(struct world* jello) {
          glVertex3f(-2, -2, z4);
          glVertex3f(-2, 2, z3);
          glEnd();
-         glDisable(GL_BLEND);
     }
     else
     {
@@ -421,7 +419,6 @@ void showInclinePlane(struct world* jello) {
         glVertex3f(-2, (-d - (a * -2)) / b, -2);
         glVertex3f(-2, (-d - (a * 2)) / b, -2);
         glEnd();
-        glDisable(GL_BLEND);
     }
     
 }
